@@ -88,7 +88,7 @@ function init(){
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
-<title>La magie des Stickers v148c</title>
+<title>La magie des Stickers v149c</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
@@ -422,7 +422,10 @@ input[type="range"] { width: 100%; height: 34px; margin: 0; accent-color: var(--
 .cq-open { margin: 12px auto 0; display: flex; }
 .cq-open[hidden] { display: none; }
 #cqKindBar[hidden], #cqMBox[hidden], #cqMPrev[hidden], #cqModeGrp[hidden], .cq-sheet .ctl[hidden], .cq-sheet .cq-row[hidden], .cq-sheet button[hidden] { display: none !important; }
-.cq-msz { display:flex; gap:8px; margin:6px 0 4px; } .cq-msz .btn { flex:1; } .cq-msz .btn[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+.cq-msz { display:flex; flex-wrap:nowrap; gap:6px; margin:6px 0 4px; } .cq-msz .btn { flex:1 1 0; padding:0 2px; font-size:14px; min-height:38px; } .cq-msz .btn[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+.cq-tabs { display:flex; gap:6px; margin:4px 0 10px; } .cq-tabs .btn { flex:1 1 0; padding:0 4px; font-size:15px; min-height:42px; } .cq-tabs .btn[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
+#cqSize { display:none !important; }
+.tabhide, .gone { display:none !important; }
 .calcard { position: fixed; inset: 0; z-index: 80; background: #fff; color: #222; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: max(14px, env(safe-area-inset-top, 0px)) 16px max(14px, env(safe-area-inset-bottom, 0px)); touch-action: none; }
 .calcard[hidden] { display: none; }
 #calAuto[hidden] { display: none !important; }
@@ -1093,7 +1096,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       </div>
     </div>
   </div>
-  <div id="cqMPrev" hidden style="position:absolute;z-index:3;right:8px;top:calc(max(10px, env(safe-area-inset-top, 0px)) + 104px);pointer-events:none;background:rgba(255,255,255,.93);color:#444;border:1px solid #cfc3a6;border-radius:10px;padding:5px 7px 6px;text-align:center;font-size:11px;line-height:1.2"><div>Aperçu sur la carte</div><canvas id="cqMPc" style="position:static;display:block;margin:3px auto 0;transform:none"></canvas></div>
+  <div id="cqMPrev" hidden style="position:absolute;z-index:3;left:50%;transform:translateX(-50%);top:calc(max(10px, env(safe-area-inset-top, 0px)) + 112px);pointer-events:none;background:rgba(255,255,255,.93);color:#444;border:1px solid #cfc3a6;border-radius:10px;padding:5px 8px 6px;text-align:center;font-size:13px;line-height:1.2"><div>Aperçu sur la carte : une ligne entière</div><canvas id="cqMPc" style="position:static;display:block;margin:3px auto 0;transform:none"></canvas></div>
   <div class="cq-chip" id="cqChip" hidden>
     <span class="t" id="cqChipT"></span>
     <button class="btn" id="cqChipM" type="button" aria-pressed="false">Zoom écran</button>
@@ -1152,26 +1155,33 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       <button class="btn" type="button" data-cqmode="both" aria-pressed="false">Contour + couleur</button>
     </div>
     <p class="cq-note" id="cqSize"></p>
-    <div id="cqMBox" hidden>
+    <div class="ctl" hidden><div class="ctl-h"><label for="cqDet">Détail des contours automatiques</label><output id="cqDetV">35</output></div>
+      <input type="range" id="cqDet" min="0" max="100" step="1" value="35"></div>
+    <div class="ctl" hidden><div class="ctl-h"><label for="cqTh">Épaisseur des traits</label><output id="cqThV">20</output></div>
+      <input type="range" id="cqTh" min="0" max="100" step="1" value="20"></div>
+    <div class="cq-tabs" id="cqTabs" role="group" aria-label="Réglages">
+      <button class="btn" type="button" data-cqtab="col" aria-pressed="true">Couleurs</button>
+      <button class="btn" type="button" data-cqtab="tai" aria-pressed="false">Taille</button>
+      <button class="btn" type="button" data-cqtab="dec" aria-pressed="false">Découpe</button>
+      <button class="btn" type="button" data-cqtab="aff" aria-pressed="false">Affichage</button>
+    </div>
+    <div data-tab="col"><div class="ctl"><div class="ctl-h"><label for="cqSat" id="cqSatL">Saturation (couleur)</label><output id="cqSatV">100 %</output></div>
+      <input type="range" id="cqSat" min="0" max="200" step="1" value="100"></div>
+    <div class="ctl"><div class="ctl-h"><label for="cqBwB">Noirs (noir et blanc)</label><output id="cqBwBV">20</output></div>
+      <input type="range" id="cqBwB" min="0" max="100" step="1" value="20"></div>
+    <div class="ctl"><div class="ctl-h"><label for="cqBwW">Blancs (noir et blanc)</label><output id="cqBwWV">15</output></div>
+      <input type="range" id="cqBwW" min="0" max="100" step="1" value="15"></div>
+    <button class="btn" type="button" id="cqRz">Remettre ces réglages</button></div>
+    <div data-tab="tai" class="tabhide"><div id="cqMBox" hidden>
       <p class="cq-note">Taille du dessin modèle sur la carte :</p>
       <div class="cq-msz" role="group" aria-label="Taille du dessin modèle">
         <button class="btn" type="button" data-cqmsz="73" aria-pressed="false">Petit</button>
         <button class="btn" type="button" data-cqmsz="92" aria-pressed="true">Moyen</button>
         <button class="btn" type="button" data-cqmsz="100" aria-pressed="false">Grand</button>
       </div>
-      <p class="cq-note">Le curseur « Taille du dessin modèle » affine entre le plus petit et le plus grand. Le dessin ne peut pas dépasser le cadre, pour rester dans la place de sa ligne. Ce réglage ne change que le dessin couleur de la carte : le sticker contour reste tel quel.</p>
+      <details><summary>Aide : à quoi sert ce réglage ?</summary><p class="cq-note">Le curseur « Taille du dessin modèle » affine entre le plus petit et le plus grand. Le dessin ne peut pas dépasser le cadre, pour rester dans la place de sa ligne. Ce réglage ne change que le dessin couleur de la carte : le sticker contour reste tel quel.</p></details>
     </div>
-    <div class="ctl" hidden><div class="ctl-h"><label for="cqDet">Détail des contours automatiques</label><output id="cqDetV">35</output></div>
-      <input type="range" id="cqDet" min="0" max="100" step="1" value="35"></div>
-    <div class="ctl" hidden><div class="ctl-h"><label for="cqTh">Épaisseur des traits</label><output id="cqThV">20</output></div>
-      <input type="range" id="cqTh" min="0" max="100" step="1" value="20"></div>
-    <div class="ctl"><div class="ctl-h"><label for="cqSat" id="cqSatL">Saturation (couleur)</label><output id="cqSatV">100 %</output></div>
-      <input type="range" id="cqSat" min="0" max="200" step="1" value="100"></div>
-    <div class="ctl"><div class="ctl-h"><label for="cqBwB">Noirs (noir et blanc)</label><output id="cqBwBV">20</output></div>
-      <input type="range" id="cqBwB" min="0" max="100" step="1" value="20"></div>
-    <div class="ctl"><div class="ctl-h"><label for="cqBwW">Blancs (noir et blanc)</label><output id="cqBwWV">15</output></div>
-      <input type="range" id="cqBwW" min="0" max="100" step="1" value="15"></div>
-    <button class="btn" type="button" id="cqRz">Remettre ces réglages</button>
+    
     <div class="ctl"><div class="ctl-h"><label for="cqZoom">Taille du dessin</label><output id="cqZoomV">100 %</output></div>
       <input type="range" id="cqZoom" min="20" max="1500" step="1" value="100"></div>
     <div class="ctl"><div class="ctl-h"><label for="cqRotR">Rotation</label><output id="cqRotV">0°</output></div>
@@ -1182,7 +1192,9 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       <button class="btn" type="button" id="cqRot">Pivoter 90°</button>
       <button class="btn" type="button" id="cqCenter">Recentrer</button>
     </div>
-    <p class="cq-note">Effacer ce qui dépasse de la case :</p>
+    </div>
+    <div data-tab="dec" class="tabhide"></div>
+    <div data-tab="dec" class="tabhide"><p class="cq-note">Effacer ce qui dépasse de la case :</p>
     <div class="cq-chips" role="group" aria-label="Découpe">
       <button class="btn" type="button" data-cqclip="none" aria-pressed="true">Rien</button>
       <button class="btn" type="button" data-cqclip="rect" aria-pressed="false">Rectangle</button>
@@ -1195,22 +1207,16 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       <button class="btn" type="button" data-cqcut="l" aria-pressed="false">Gauche</button>
       <button class="btn" type="button" data-cqcut="r" aria-pressed="false">Droite</button>
     </div>
-    <div class="cq-row"><button class="btn" type="button" id="cqErase">Gomme : effacer au doigt</button></div>
-    <div class="ctl"><div class="ctl-h"><label for="cqOp">Intensité du dessin</label><output id="cqOpV">100 %</output></div>
+    <div class="cq-row"><button class="btn" type="button" id="cqErase">Gommer / Protéger</button></div>
+    </div>
+    <div data-tab="aff" class="tabhide"></div>
+    <div data-tab="aff" class="tabhide"><div class="ctl"><div class="ctl-h"><label for="cqOp">Intensité du dessin</label><output id="cqOpV">100 %</output></div>
       <input type="range" id="cqOp" min="15" max="100" step="1" value="100"></div>
     <div class="cq-row">
       <button class="btn" type="button" id="cqFrameBtn" aria-pressed="true">Cadre de la case</button>
       <button class="btn" type="button" id="cqGridBtn" aria-pressed="true">Quadrillage</button>
       <button class="btn" type="button" id="cqMirror" aria-pressed="false">Miroir</button>
       <button class="btn" type="button" id="cqBg" aria-pressed="false">Fond noir</button>
-    </div>
-    <div class="ctl"><div class="ctl-h"><label for="cqZ">Zoom écran (le sticker ne change pas)</label><output id="cqZV">×1,0</output></div>
-      <input type="range" id="cqZ" min="0" max="100" step="1" value="25"></div>
-    <div class="cq-row">
-      <button class="btn" type="button" id="cqZm" aria-label="Zoom arrière">−</button>
-      <button class="btn" type="button" id="cqZp" aria-label="Zoom avant">+</button>
-      <button class="btn" type="button" id="cqZmode" aria-pressed="false">Zoom écran</button>
-      <button class="btn" type="button" id="cqZ1">Taille réelle</button>
     </div>
     <details>
       <summary>Étalonnage de l'écran</summary>
@@ -1223,6 +1229,30 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       </div>
     </details>
     <p class="cq-note">Un doigt déplace le dessin, deux doigts l'agrandissent et le font tourner. Ce que tu règles ici s'applique aussi sur la planche. Pense à régler la mise en veille de ton téléphone sur « jamais ».</p>
+  </div>
+    <div class="gone"><details>
+      <summary>Étalonnage de l'écran</summary>
+      <p class="cq-note">Pour que la case mesure vraiment sa taille réelle (comme sur ta planche), étalonne ton écran une seule fois avec ta carte bancaire.</p>
+      <div class="cq-row"><button class="btn" id="cqCardCal" type="button">Étalonner avec ma carte bancaire</button></div>
+      <div hidden>
+        <div class="cq-bar" id="cqBar"></div>
+        <output id="cqPpmV"></output>
+        <input type="range" id="cqPpm" min="30" max="120" step="1" value="60">
+      </div>
+    </details>
+    <p class="cq-note">Un doigt déplace le dessin, deux doigts l'agrandissent et le font tourner. Ce que tu règles ici s'applique aussi sur la planche. Pense à régler la mise en veille de ton téléphone sur « jamais ».</p>
+  </div>
+    <div class="gone"><div class="ctl"><div class="ctl-h"><label for="cqZ">Zoom écran (le sticker ne change pas)</label><output id="cqZV">×1,0</output></div>
+      <input type="range" id="cqZ" min="0" max="100" step="1" value="25"></div>
+    <div class="cq-row">
+      <button class="btn" type="button" id="cqZm" aria-label="Zoom arrière">−</button>
+      <button class="btn" type="button" id="cqZp" aria-label="Zoom avant">+</button>
+      <button class="btn" type="button" id="cqZmode" aria-pressed="false">Zoom écran</button>
+      <button class="btn" type="button" id="cqZ1">Taille réelle</button>
+    </div>
+    </div>
+  </div>
+    <div class="gone"></div>
   </div>
 </div>
 
@@ -2066,7 +2096,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
   var MFW = 16.9, MFH = 24;
   function mdlOf(a) {
     var sz = a.mSize == null ? 92 : a.mSize; sz = Math.max(50, Math.min(100, sz));
-    return { size: sz, dx: a.mDx || 0, dy: a.mDy || 0, rot: a.mRot || 0, clip: a.mClip || "none", cut: a.mCut || "" };
+    return { size: sz, dx: a.mDx || 0, dy: a.mDy || 0, rot: a.rot || 0, clip: a.mClip || "none", cut: a.mCut || "" };
   }
   function placeOp(r, cvv, W, H, ox, oy, fw, fh, sw) {
     fw = fw || W; fh = fh || H;
@@ -3830,7 +3860,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       } catch (e) {}
     }
     /* « Dessin modèle » : le même écran d'ajustement, mais sur les réglages du dessin couleur de la carte (rangés dans adj.m*) */
-    var MAPM = { size: "mSize", dx: "mDx", dy: "mDy", rot: "mRot", clip: "mClip", cut: "mCut" }, MD0 = mdlOf({});
+    var MAPM = { size: "mSize", dx: "mDx", dy: "mDy", clip: "mClip", cut: "mCut" }, MD0 = mdlOf({});
     function modRow(row) {
       if (!row) return row;
       if (row._mp) return row._mp;
@@ -4073,17 +4103,31 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       if (!row) { box.hidden = true; return; }
       box.hidden = false;
       try { ensureCont(row); } catch (e) {}
-      var col = getColor(row) || row.cont, lin = getLine(row, 1), gap = 9, W = GRIF.W, H = GRIF.H, tw = MFW + gap + W, th = MFH;
+      var col = getColor(row) || row.cont, lin = getLine(row, 1), W = GRIF.W, H = GRIF.H, dW = DOOD.W, dH = DOOD.H;
+      var FW = 105, CM = 8, cW = 15.5, gg = 9, tot = cW + gg + W + gg + dW, gx0 = (FW - tot) / 2, kx = gx0 + cW + gg, dx = kx + W + gg;
+      var X0 = 2.5, BW = 100, bandH = MFH + 4;
       var sw = stage.getBoundingClientRect().width || 360;
-      var k = Math.max(2, Math.min(cq.ppm * 0.5, (sw / 2 - MFW * cq.ppm / 2 - 26) / tw)), dpr = 2, c = $("#cqMPc");
-      c.width = Math.round(tw * k * dpr); c.height = Math.round(th * k * dpr); c.style.width = Math.round(tw * k) + "px"; c.style.height = Math.round(th * k) + "px";
-      var x = c.getContext("2d"); x.setTransform(dpr * k, 0, 0, dpr * k, 0, 0); x.imageSmoothingQuality = "high"; x.clearRect(0, 0, tw, th);
-      x.lineWidth = 0.25; x.strokeStyle = "#bbb"; x.setLineDash([0.8, 0.8]); x.strokeRect(0.1, 0.1, MFW - 0.2, MFH - 0.2); x.setLineDash([]);
-      var ky = (MFH - H) / 2, kx = MFW + gap;
-      x.lineWidth = 0.3; x.strokeStyle = "#8a8a8a"; x.strokeRect(kx, ky, W, H);
+      var k = Math.max(2, Math.min((sw - 44) / BW, window.innerHeight * 0.17 / bandH)), dpr = 2, c = $("#cqMPc");
+      c.width = Math.round(BW * k * dpr); c.height = Math.round(bandH * k * dpr); c.style.width = Math.round(BW * k) + "px"; c.style.height = Math.round(bandH * k) + "px";
+      var x = c.getContext("2d"); x.setTransform(dpr * k, 0, 0, dpr * k, -dpr * k * X0, dpr * k * bandH / 2); x.imageSmoothingQuality = "high"; x.clearRect(X0, -bandH / 2, BW, bandH);
+      x.fillStyle = "#fff"; x.fillRect(X0, -bandH / 2, BW, bandH);
+      var hb = bandH / 2;
+      x.lineCap = "butt"; x.strokeStyle = "#C7993F"; x.lineWidth = 0.5; [4, 101].forEach(function (xx) { x.beginPath(); x.moveTo(xx, -hb); x.lineTo(xx, hb); x.stroke(); });
+      x.strokeStyle = "#5B2A86"; x.lineWidth = 0.25; [5.6, 99.4].forEach(function (xx) { x.beginPath(); x.moveTo(xx, -hb); x.lineTo(xx, hb); x.stroke(); });
+      var mx = gx0 + cW / 2 - MFW / 2;
+      x.lineWidth = 0.25; x.strokeStyle = "#999"; x.setLineDash([0.8, 0.8]); x.strokeRect(mx, -MFH / 2, MFW, MFH); x.setLineDash([]);
+      x.lineWidth = 0.3; x.strokeStyle = "#8a8a8a"; x.strokeRect(kx, -H / 2, W, H); x.strokeRect(dx, -dH / 2, dW, dH);
       try {
-        if (col) { var fr = { adj: Object.assign({}, row.adj, mdlOf(row.adj)), mask: row.mask, prot: row.prot, maskV: row.maskV, protV: row.protV }, o = placeOp(fr, col, MFW, MFH, 0, 0); x.drawImage(o.cv, o.x, o.y, o.w, o.h); }
-        if (lin) { var o2 = placeOp(row, lin, W, H, kx, ky); x.drawImage(o2.cv, o2.x, o2.y, o2.w, o2.h); }
+        if (col) {
+          var fr = { adj: Object.assign({}, row.adj, mdlOf(row.adj)), mask: row.mask, prot: row.prot, maskV: row.maskV, protV: row.protV }, o = placeOp(fr, col, MFW, MFH, mx, -MFH / 2);
+          var iw0 = FW - 2 * CM; o.x = o.w >= iw0 ? CM + (iw0 - o.w) / 2 : Math.max(CM, Math.min(FW - CM - o.w, o.x));
+          x.drawImage(o.cv, o.x, o.y, o.w, o.h);
+        }
+        if (lin) {
+          var o2 = placeOp(row, lin, W, H, kx, -H / 2); x.drawImage(o2.cv, o2.x, o2.y, o2.w, o2.h);
+          var so = placeOp(row, lin, W, H, 0, 0), ks = Math.min(dW / W, dH / H), ccx = dx + dW / 2;
+          x.drawImage(so.cv, ccx + (so.x - W / 2) * ks, (so.y - H / 2) * ks, so.w * ks, so.h * ks);
+        }
       } catch (e) {}
     }
     function drawGrid() {
@@ -4121,6 +4165,18 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       $("#cqSheet").hidden = v || !panelOpen; $("#cqLockMsg").hidden = !v; $("#cqUndo").hidden = v; place();
     }
     function setPanel(v) { panelOpen = v; $("#cqSheet").hidden = cq.locked || !v; $("#cqPanel").setAttribute("aria-expanded", v ? "true" : "false"); place(); }
+    function setTab(t) { cq.tab = t; $$("[data-tab]").forEach(function (e) { e.classList.toggle("tabhide", e.getAttribute("data-tab") !== t); }); $$("[data-cqtab]").forEach(function (b) { pressed(b, b.getAttribute("data-cqtab") === t); }); }
+    function fitModel() {
+      modPrevNow(); var g0 = geom(), P = cq.ppm, sh = $("#cqSheet"), top = Math.max(120, $("#cqMPrev").getBoundingClientRect().bottom + 10), bot = (panelOpen && !cq.locked) ? sh.getBoundingClientRect().top : window.innerHeight;
+      var aw = window.innerWidth * 0.8, ah = Math.max(120, bot - top) * 0.88;
+      var nz = Math.max(ZMIN, Math.min(ZMAX, Math.min(aw / (g0.W * P * 1.6), ah / (g0.H * P * 1.6))));
+      resetView();
+      var rc = cell.getBoundingClientRect(), cx = rc.left + rc.width / 2, cy = rc.top + rc.height / 2;
+      zoomAt(nz, cx, cy);
+      var rc2 = cell.getBoundingClientRect();
+      cq.px += window.innerWidth / 2 - (rc2.left + rc2.width / 2); cq.py += (top + (bot - top) / 2) - (rc2.top + rc2.height / 2);
+      view();
+    }
     function openCq(kind) {
       cq.ppm = PPM.get() || cq.ppm;
       var cqKey = kind + "|" + activeBank;
@@ -4135,6 +4191,8 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       var zr = $("#cqZoom"); zr.min = md ? 50 : 20; zr.max = md ? 100 : 1500;
       var zl = document.querySelector('label[for="cqZoom"]'); if (zl) zl.textContent = md ? _t("Taille du dessin modèle") : _t("Taille du dessin");
       if (md) cq.mode = "color";
+      $("#cqRotR").closest(".ctl").hidden = md; ["#cqRotM", "#cqRotP", "#cqRot"].forEach(function (q) { $(q).hidden = md; });
+      setTab(md ? "tai" : (cq.tab && cq.tab !== "tai" ? cq.tab : "col"));
       $("#cqSolo").hidden = kind !== "solo"; if (kind === "solo") soloSync();
       $$("[data-cqmode=line],[data-cqmode=both]").forEach(function (b) { var rr0 = cur(); b.hidden = dd || !(rr0 && rr0.rawC); });
       $("#cqDet").closest(".ctl").hidden = true; $("#cqTh").closest(".ctl").hidden = true;
@@ -4148,6 +4206,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       $("#cqPpm").value = Math.round(cq.ppm * 10); $("#cqPpmV").textContent = cq.ppm.toFixed(1) + " px/mm";
       $("#cqBar").style.width = (54 * cq.ppm) + "px";
       applyAll();
+      if (md) fitModel();
       try { if (navigator.wakeLock) navigator.wakeLock.request("screen").then(function (l) { wake = l; }).catch(function () {}); } catch (e) {}
     }
     function closeCq() {
@@ -4287,6 +4346,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
     $("#cqZp").addEventListener("click", function () { zoomCentre(1.25); });
     $("#cqZm").addEventListener("click", function () { zoomCentre(0.8); });
     $("#cqZ1").addEventListener("click", resetView);
+    $$("[data-cqtab]").forEach(function (b) { b.addEventListener("click", function () { setTab(b.getAttribute("data-cqtab")); }); });
     $("#cqChipR").addEventListener("click", resetView);
     function toggleZm() { cq.zmode = !cq.zmode; view(); }
     $("#cqZmode").addEventListener("click", toggleZm);
@@ -4303,7 +4363,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
       requestAnimationFrame(function () { detBusy = false; rebuild(cq.idx); render(); });
     });
     $("#cqTh").addEventListener("input", function (e) { var r = cur(); if (!r) return; r.adj.thick = +e.target.value; $("#cqThV").textContent = r.adj.thick; place(); });
-    $("#cqCenter").addEventListener("click", function () { var r = cur(); if (r) { pushHist(); r.adj.size = cq.kind === "mod" ? 92 : 100; r.adj.dx = 0; r.adj.dy = 0; r.adj.rot = 0; changed(); } });
+    $("#cqCenter").addEventListener("click", function () { var r = cur(); if (r) { pushHist(); r.adj.size = cq.kind === "mod" ? 92 : 100; r.adj.dx = 0; r.adj.dy = 0; if (cq.kind !== "mod") r.adj.rot = 0; changed(); } });
     $("#cqBg").addEventListener("click", function () { cq.dark = !cq.dark; applyAll(); });
     $("#cqZoom").addEventListener("input", function (e) { var r = cur(); if (r) { r.adj.size = +e.target.value; changed(); } });
     $("#cqOp").addEventListener("input", function (e) { cq.op = +e.target.value; $("#cqOpV").textContent = cq.op + " %"; place(); });
@@ -4353,7 +4413,7 @@ function loop(t){if(!run)return;var e=(t-t0)/1000,ps=pos(e);
         mx = (t[0].x + t[1].x) / 2; my = (t[0].y + t[1].y) / 2;
         if (last && last.d > 0) {
           a.size = clampN(a.size * d / last.d, 20, 1500);
-          a.rot = wrap180(a.rot + sg * (ang - last.ang) * 180 / Math.PI);
+          if (cq.kind !== "mod") a.rot = wrap180(a.rot + sg * (ang - last.ang) * 180 / Math.PI);
           a.dx = clampN(a.dx + sg * (mx - last.mx) / (W * P * cq.zoom) * 100, -800, 800); a.dy = clampN(a.dy + (my - last.my) / (H * P * cq.zoom) * 100, -800, 800);
         }
         last = { d: d, ang: ang, mx: mx, my: my };
