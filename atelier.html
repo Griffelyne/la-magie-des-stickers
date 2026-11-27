@@ -259,7 +259,8 @@ h2,h3{font-family:var(--fd);font-weight:400;letter-spacing:.04em}
 #skPanel .sli .val{width:44px;text-align:right}
 #skPanel .skrow{display:flex;align-items:center;gap:8px;margin:8px 0;font:14px var(--fd)}
 #skPanel .skrow input{width:20px;height:20px}
-#skPanel .skbtns{display:flex;gap:8px;margin-top:8px}
+#skPanel .skbtns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#skPanel .skbtns #skHand{flex:1 1 100%}
 #skPanel .skbtns button{flex:1;min-height:46px;border-radius:999px;font:600 15px var(--fd);background:var(--rose)}
 #skPanel .skbtns button.pri{background:var(--grad);color:#fff}
 
@@ -606,7 +607,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   <div class="sli"><label>Épaisseur</label><input id="skThick" type="range" min="-2" max="4" step="0.5" value="0"><span class="val" id="skThickv">0</span></div>
   <div class="sli"><label>Lissage</label><input id="skSoft" type="range" min="0" max="4" step="1" value="1"><span class="val" id="skSoftv">1</span></div>
   <label class="skrow"><input type="checkbox" id="skHide" checked> Cacher l’esquisse ensuite</label>
-  <div class="skbtns"><button id="skNo">Annuler</button><button id="skOk" class="pri">Valider</button></div>
+  <div class="skbtns"><button id="skHand">Repasser à la main</button><button id="skNo">Annuler</button><button id="skOk" class="pri">Valider</button></div>
 </div>
 <div id="sheet4" class="sheet" hidden>
   <h3><span>Image modèle</span><button id="bSet4Min" class="ic" style="font-size:14px;width:auto;padding:0 12px;height:36px;margin-left:auto">▾ Réduire</button><button id="bSet4Close" class="ic" style="font-size:22px;width:36px;height:36px">&#10005;</button></h3>
@@ -3097,7 +3098,7 @@ function addPicker() {
     [1, 'Modèle', 'Ton image à calquer', () => $('#bImg').click()],
     [2, 'Case guide', 'Repère de la case sticker', () => guideOpen()],
     [3, 'Esquisse', 'Dessin libre au crayon', () => newSketch()],
-    [4, 'Contours esquisse', 'Tes traits propres', () => addLineLayerNew()],
+    [4, 'Contours esquisse', 'Traits noirs faits depuis ton esquisse', () => skOpen()],
     [5, 'Couleurs', 'Tes couleurs, sous les traits', () => addColorLayerNew()],
     [6, 'Ombres', 'Fonce la couleur du dessous', () => addShadeLayer('shade')],
     [7, 'Lumières', 'Éclaire la couleur du dessous', () => addShadeLayer('light')],
@@ -3832,7 +3833,7 @@ const GUIDE = [
   ['1', 'Modèle', 'Importe ton image modèle<br>(Fichier, puis Importer une image).<br>Avec deux doigts, agrandis-la et place-la.<br>Touche « Terminé » quand elle est bien placée.'],
   ['2', 'Case guide', 'Bouton + des calques, puis Case guide.<br>Choisis 1 ou 3 cases, ce qui peut dépasser, et protège en vert.<br>Ce qui dépasse de la case peut être coupé à l’export.'],
   ['3', 'Esquisse', 'Dessine librement au crayon pour trouver ton idée.<br>Masque le modèle pour voir ton trait seul.'],
-  ['4', 'Contours esquisse', 'Repasse tes traits propres par-dessus ton esquisse.<br>Un trait fin et régulier.'],
+  ['4', 'Contours esquisse', 'Tes traits noirs arrivent depuis ton esquisse.<br>Règle l’épaisseur, puis valide.<br>Tu peux aussi les repasser à la main.'],
   ['5', 'Couleurs', 'Colorie sous les traits.<br>Le pot de peinture s’arrête sur tes lignes.'],
   ['6', 'Ombres', 'Passe le doigt : la couleur se choisit toute seule.<br>Elle est plus foncée que celle du dessous.<br>Choisis 1, 2 ou 3 tons.<br>Pour une teinte précise : « Couleur à la main ».'],
   ['7', 'Lumières', 'Même principe,<br>avec une couleur plus claire que celle du dessous.'],
@@ -4047,6 +4048,7 @@ function skClose(ok) {
 ['skThick', 'skSoft'].forEach(id => $('#' + id).addEventListener('input', skLive));
 $('#skOk').addEventListener('click', () => skClose(true));
 $('#skNo').addEventListener('click', () => skClose(false));
+$('#skHand').addEventListener('click', () => { skClose(false); addLineLayerNew(); });
 $('#bSk2Line').addEventListener('click', skOpen);
 function syncSheetTop() { document.documentElement.style.setProperty('--sh', Math.ceil($('#top').getBoundingClientRect().bottom) + 'px'); }
 new ResizeObserver(syncSheetTop).observe($('#top')); addEventListener('resize', syncSheetTop); syncSheetTop();
